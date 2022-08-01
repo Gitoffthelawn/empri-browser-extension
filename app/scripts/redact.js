@@ -1,5 +1,4 @@
 import { DateTime } from "luxon";
-import { updateStudyData, updateViewCount } from "./study.js";
 import { toFuzzyDate } from "./fuzzydate.js";
 import { createPopper } from '@popperjs/core';
 
@@ -411,37 +410,6 @@ function calcDistanceToClosestSibling(el) {
         updateFuzzyDateElement(fuzDateEl, dateTime, mostsigunit);
       }
     }
-    function logViewLoad() {
-      let urlType = getUrlType();
-      console.log(`Log view load for ${urlType}`);
-      browser.storage.local.get("studyOptIn")
-      .then((res) => {
-        if (res.studyOptIn) {
-          updateViewCount(urlType);
-        }
-      })
-      .catch(error => console.error(error));
-    }
-    function logChoice(el) {
-      // log the unredaction choice of the user
-      if (el.dataset.msuChanged !== "true") {
-        return; // msu did not change – nothing to log
-      }
-      el.dataset.msuChanged = false; // clear flag
-      // unredact to the msu of the original datetime
-      let tsType = getTimestampType(el);
-      let closestSibDist = calcDistanceToClosestSibling(el); // Infinite if no siblings
-      let msu = el.dataset.mostsigunit;
-      let urlType = getUrlType();
-      console.log(`Unredact ${urlType} ${tsType} to ${msu} with distance ${closestSibDist}sec`);
-      browser.storage.local.get("studyOptIn")
-      .then((res) => {
-        if (res.studyOptIn) {
-          return updateStudyData(urlType, tsType, msu, closestSibDist);
-        }
-      })
-      .catch(error => console.error(error));
-    }
     function getUrlType() {
       let path = window.location.pathname;
       let numPathComp = path.split("/").reduce((cnt, val) => {
@@ -666,21 +634,5 @@ function calcDistanceToClosestSibling(el) {
         }
       }
     }, true);
-
-    // - log view for study (if opted in)
-    logViewLoad();
-
-    // - send study report if participating and necessary
-    // The actual sending is done by the background script to be
-    // thread-safe for parallel content script runs
-    browser.storage.local.get("studyOptIn")
-    .then((res) => {
-      if (res.studyOptIn) {
-        return browser.runtime.sendMessage(
-          { type: "sendReport" }
-        );
-      }
-    })
-    .catch(error => console.error(error));
   });
 })();

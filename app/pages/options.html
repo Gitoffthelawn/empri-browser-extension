@@ -21,33 +21,9 @@
         </select>
         <label for="example">Example</label>
         <input name="example" id="example" type="datetime-local" readonly>
-        <label for="study-optin">Participate in anonymised study (<a href="https://empri-devops.de/timestamp-precision-study/" target="_blank">learn more</a>)</label>
-        <input name="study-optin" id="study-optin" type="checkbox">
-        <a href="studydataview.html" target="_blank">Show data</a>
+        <p id="study-info">Click <a href="studydataview.html" target="_blank">here</a> to view your local data for the discontinued <a href="https://empri-devops.de/timestamp-precision-study/" target="_blank">study</a>.</p>
       </form>
-      <!-- The Modal -->
-      <div id="datapurgemodal" class="modal">
-        <div class="modal-content">
-          <p>
-            Opting out will end your participation and delete the study data from your browser.
-            You can also choose to remove all your data from our study.
-            However we appreciate if you let us use previously sent data.
-            <br>
-            If you want to keep a copy you should
-            <a href="studydataview.html" target="_blank">make one</a>
-            before continuing.
-          </p>
-          <p id="deleteServer-box">
-            <label for="deleteServer">Remove data from study</label>
-            <input type="checkbox" id="deleteServer" name="deleteServer">
-          </p>
-          <p id="action-box">
-            <span id="purgeCont" class="button btn-red" role="button">Delete and opt-out</span>
-            <span id="purgeAbort" class="button btn-gray" role="button">Don't opt-out now</span>
-          </p>
-        </div>
       </div>
-      <p id="response" class="message"></p>
       <p id="contact">
         <a href="mailto:christian.burkert@uni-hamburg.de?subject=GHTimestampStudy">Contact support</a>
       </p>

@@ -1,11 +1,8 @@
-import { sendReport } from "./study.js";
-
 browser.storage.sync.get("ghrOn").then((res) => {
   if (typeof res.ghrOn == "undefined") {
     browser.storage.sync.set({
       ghrOn: true,
       mostsigunit: "year",
-      studyOptIn: false,
     });
   } else if (!res.ghrOn) {
     browser.browserAction.setIcon({
@@ -26,27 +23,21 @@ browser.runtime.onInstalled.addListener(async ({ reason, temporary }) => {
         await browser.tabs.create({ url });
       }
       break;
+    case "update":
+      {
+        browser.storage.local.get("studyOptIn")
+        .then((res) => {
+          if (res.studyOptIn) {
+            const url = browser.runtime.getURL("pages/update.html");
+            return browser.tabs.create({ url });
+          }
+        })
+        .then(() => {
+          // opt out to not show message again
+          return browser.storage.local.set({ studyOptIn: false });
+        })
+        .catch((error) => console.error(error));
+      }
+      break;
   }
 });
-
-
-// Synchronise reporting in background script to avoid
-// duplicate reporting by parallel active content scripts
-var reportRunning = false;
-function manageReporting(message, sender, respond) {
-  if (message.type != "sendReport") {
-    return; // message not for us
-  }
-  if (reportRunning) {
-    return; // already triggered by another sender
-  }
-  reportRunning = true;
-  sendReport()
-  .then(() => respond("done"))
-  .catch((err) => respond(err))
-  .finally(() => {
-    reportRunning = false;
-  });
-  return true; // make caller wait for async response
-}
-browser.runtime.onMessage.addListener(manageReporting);
