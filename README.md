@@ -10,6 +10,10 @@ GitHub Privacy is a browser add-on that demonstrates privacy-friendly reduction 
 It is developed as part of the [EMPRI-DEVOPS](https://empri-devops.de/) research project.
 The extension and our study are not connected to GitHub, Inc. in any way.
 
+**Update:** The study has ended on July 31st, 2022.
+The ability to contribute usage data has been removed as of version 2.0.
+Feel free to keep using the extension!
+
 ### Precision vs. data minimisation
 
 Timestamps are usually found on GitHub where they describe the time of a user action:
